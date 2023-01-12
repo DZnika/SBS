@@ -2,17 +2,10 @@ package banking;
 
 public class Account {
 
-    private int id;
     private String cardNumber;
     private String pin;
     private double balance;
 
-    public int getId() {
-        return id;
-    }
-    public void setId(int id) {
-        this.id = id;
-    }
     public String getCardNumber() {
         return cardNumber;
     }
@@ -26,12 +19,6 @@ public class Account {
         this.balance = balance;
     }
 
-    public int createId() {
-        id = 0;
-        id++;
-        this.id = id;
-        return id;
-    }
     public String createCardNumber() {
         cardNumber = "400000" + String.format("%09d", (long) (Math.random() * 999999999L));
         int lastDigit = getCheckDigit(cardNumber);

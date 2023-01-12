@@ -6,37 +6,39 @@ import java.util.List;
 
 public class AccountRepository {
 
-    private Connection connection;
+    private static Connection connection;
 
-    AccountRepository(String file) throws SQLException {
+    AccountRepository(String fileName) throws SQLException {
 
-    try {
-        connection = DriverManager.getConnection("jdbc:sqlite:" + file);
-        String createTableSql = "CREATE TABLE IF NOT EXISTS card" +
-                "(\n" +
-                "id INTEGER PRIMARY KEY,\n" +
-                "number TEXT,\n" +
-                "pin TEXT,\n" +
-                "balance INTEGER DEFAULT 0\n" +
-                ")";
-        try (Statement stmt0 = connection.createStatement()) {
-                ((Statement) stmt0).execute(createTableSql);
+        try {
+            connection = DriverManager.getConnection("jdbc:sqlite:" + fileName);
+
+            String createTableSql = "CREATE TABLE IF NOT EXISTS card (\n"
+                    + "    id INTEGER PRIMARY KEY AUTOINCREMENT, \n"
+                    + "    number TEXT NOT NULL, \n"
+                    + "    pin TEXT NOT NULL, \n"
+                    + "    balance INTEGER DEFAULT 0\n"
+                    + ");";
+
+            Statement stmt = connection.createStatement();
+            stmt.execute(createTableSql);
+
         } catch (SQLException e) {
-                System.out.println("Connection to SQLite database established.");
-            }
-        } catch (SQLException e) {
-                System.out.println(e.getMessage());
-            }
+            e.printStackTrace();
+        }
     }
-    void insert (Account acc) throws SQLException {
 
-        PreparedStatement pstmt = connection.prepareStatement("insert into card values (?, ?, ?, ?)");
+    public static void insert(Account acc) throws SQLException {
 
-        pstmt.setInt(1, acc.getId());
-        pstmt.setString(2, acc.getCardNumber());
-        pstmt.setString(3, acc.getPin());
-        pstmt.setDouble(4, acc.getBalance());
+        PreparedStatement pstmt = connection.prepareStatement("insert into card (number, pin, balance) values (?, ?, ?)");
+
+        pstmt.setString(1, acc.getCardNumber());
+        pstmt.setString(2, acc.getPin());
+        pstmt.setDouble(3, acc.getBalance());
 
         pstmt.executeUpdate();
+    }
+    public void update(Account acc) {
+
     }
 }
