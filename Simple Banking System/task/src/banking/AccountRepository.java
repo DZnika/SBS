@@ -35,10 +35,23 @@ public class AccountRepository {
         pstmt.setString(1, acc.getCardNumber());
         pstmt.setString(2, acc.getPin());
         pstmt.setDouble(3, acc.getBalance());
-
         pstmt.executeUpdate();
     }
-    public void update(Account acc) {
+    public void update (Account acc) {
 
+        String sql = "UPDATE card SET" +
+                "pin = ?," +
+                "balance = ?" +
+                "WHERE number = ?";
+        try {
+            PreparedStatement pstmt = connection.prepareStatement (sql);
+            pstmt.setString (1, acc.getPin ());
+            pstmt.setDouble (2, acc.getBalance ());
+            pstmt.setString (3, acc.getCardNumber ());
+            pstmt.executeUpdate ();
+
+        } catch (SQLException e) {
+            throw new RuntimeException (e);
+        }
     }
 }

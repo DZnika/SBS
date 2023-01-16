@@ -9,7 +9,15 @@ public class Main {
 
     static Scanner scanner = new Scanner(System.in);
     static List<Account> accountList = new ArrayList<>();
-    static AccountRepository accountRepository = new AccountRepository("card.s3db");
+    static AccountRepository accountRepository;
+
+    static {
+        try {
+            accountRepository = new AccountRepository("card.s3db");
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
 
     public static void main(String[] args) throws SQLException {
@@ -38,7 +46,7 @@ public class Main {
                         System.out.println("You have successfully logged in!");
                         int izbor = 100;
                         while(izbor != 0) {
-                            System.out.println("1. Balance\n2. Log out\n3. Do transfer\n4. Close account\n5. Log out\n0. Exit\n>");
+                            System.out.println("1. Balance\n2. Add income\n3. Do transfer\n4. Close account\n5. Log out\n0. Exit\n>");
                             izbor = scanner.nextInt();
                             switch (izbor){
                                 case 1:
@@ -48,7 +56,6 @@ public class Main {
                                     System.out.println("Enter income: \n");
                                     double income = scanner.nextDouble();
                                     addIncome(card, income);
-
                                 case 5:
                                     izbor = 0;
                                     System.out.println("You have successfully logged out!");
@@ -87,13 +94,17 @@ public class Main {
         }
         return null;
     }
-    public static Account findAccount(String cardNumber) {
-
-
+    public static Account findAccount(String cardNumber, String pin) {
+        for (Account a : accountList) {
+            if (cardNumber.equals (a.getCardNumber ()) && pin.equals (a.getPin ())) {
+                return a;
+            }
+        }
+        return null;
     }
     public static void addIncome (Account acc, double income) {
         acc.setBalance(acc.getBalance() + income);
-        accountRepository.
+        accountRepository.update(acc);
         System.out.println("Income was added!");
     }
 }
