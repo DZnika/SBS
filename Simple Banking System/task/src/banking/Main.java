@@ -56,6 +56,11 @@ public class Main {
                                     System.out.println("Enter income: \n");
                                     double income = scanner.nextDouble();
                                     addIncome(card, income);
+                                case 3:
+
+                                case 4:
+                                    AccountRepository.deleteAccount(card);
+                                    System.out.println("The account has been closed!");
                                 case 5:
                                     izbor = 0;
                                     System.out.println("You have successfully logged out!");

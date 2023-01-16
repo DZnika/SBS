@@ -54,4 +54,15 @@ public class AccountRepository {
             throw new RuntimeException (e);
         }
     }
+    public static void deleteAccount(Account acc) {
+        try {
+            Statement stmt = connection.createStatement();
+            String deleteRowSQL = "DELETE FROM card WHERE number=" + acc.getCardNumber();
+            stmt.execute(deleteRowSQL);
+            stmt.close();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 }
